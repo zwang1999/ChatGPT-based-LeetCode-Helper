@@ -1,10 +1,15 @@
 # ChatGPT-based-Leetcode-Helper
 
-A package should be installed with "pip3 install python-leetcode" to run the following file:
+
+(1) Install a required pacakge with "pip3 install python-leetcode" to run the following file:
 
 ChatGPT-based Leetcode Helper.ipynb
 
-An OpenAI API key is needed to run the following files:
+(2) Follow the instructions in get_session_id.ipynb to run the following file:
+
+ChatGPT-based Leetcode Helper.ipynb
+
+(3) Prepare an OpenAI API key to run the following files:
 
 ChatGPT-based Leetcode Helper.ipynb, ChatGPT-based Leetcode Helper.py
 
