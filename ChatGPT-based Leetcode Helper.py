@@ -258,8 +258,6 @@ def main(args):
     end_time = time.time()
  
     print(f'Time for {num_processes} Processes: {end_time - start_time} seconds')
- 
-    print(f'Time for {num_threads} Threads: {end_time - start_time} seconds')
     
     with open('./replies.txt','r+') as f:
         f.truncate(0)
