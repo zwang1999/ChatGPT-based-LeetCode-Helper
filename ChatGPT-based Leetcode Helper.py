@@ -60,7 +60,7 @@ def get_question_by_slug(slug, sleep = False):
     content = response.json()
     
     if sleep:
-        time.sleep(1)
+        time.sleep(0.5)
     
     question = content['data']['question']
     question['similarQuestions'] = parse_similar_questions(question['similarQuestions'])
