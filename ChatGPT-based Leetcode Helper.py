@@ -242,7 +242,7 @@ def main(args):
     
     print(f'The number of questions to be answered: {len(questions)}')
     
-    # Optimized point 2: Multi-threaded ChatGPT requests
+    # Optimized point 2: Multi-processed ChatGPT requests
     
     info = [(question['questionId'], question['content'], question['code'], args.api_key, args.feedback) for question in questions]
 
