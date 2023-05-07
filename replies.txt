@@ -1,598 +1,302 @@
 1. Two Sum
 class Solution:
     def twoSum(self, nums: List[int], target: int) -> List[int]:
+        # create a dictionary to store values and their indices
         num_dict = {}
-        for i, num in enumerate(nums):
-            if target - num in num_dict:
-                return [num_dict[target - num], i]
-            num_dict[num] = i
-
-100. Same Tree
-if p is None and q is None:
-    return True
-elif not p or not q:
-    return False
-elif p.val != q.val:
-    return False
-else:
-    return self.isSameTree(p.left, q.left) and self.isSameTree(p.right, q.right)
-
-101. Symmetric Tree
-class Solution:
-    def isSymmetric(self, root: Optional[TreeNode]) -> bool:
-        if not root:
-            return True
-        
-        def isMirror(node1, node2):
-            if not node1 and not node2:
-                return True
-            if not node1 or not node2:
-                return False
-            return (node1.val == node2.val) and isMirror(node1.left, node2.right) and isMirror(node1.right, node2.left)
-        
-        return isMirror(root.left, root.right)
-
-104. Maximum Depth of Binary Tree
-class Solution:
-    def maxDepth(self, root: Optional[TreeNode]) -> int:
-        if root is None:
-            return 0
-        left_depth = self.maxDepth(root.left)
-        right_depth = self.maxDepth(root.right)
-        return max(left_depth, right_depth) + 1
-
-108. Convert Sorted Array to Binary Search Tree
-# Definition for a binary tree node.
-# class TreeNode:
-#     def __init__(self, val=0, left=None, right=None):
-#         self.val = val
-#         self.left = left
-#         self.right = right
-
-class Solution:
-    def sortedArrayToBST(self, nums: List[int]) -> Optional[TreeNode]:
-        if len(nums) == 0:
-            return None
-        mid = len(nums) // 2
-        root = TreeNode(nums[mid])
-        root.left = self.sortedArrayToBST(nums[:mid])
-        root.right = self.sortedArrayToBST(nums[mid+1:])
-        return root
-
-110. Balanced Binary Tree
-class Solution:
-    def isBalanced(self, root: Optional[TreeNode]) -> bool:
-        def isBalancedHelper(node):
-            if not node:
-                return True, 0
-            leftBalanced, leftHeight = isBalancedHelper(node.left)
-            rightBalanced, rightHeight = isBalancedHelper(node.right)
-            balanced = abs(leftHeight-rightHeight) <= 1 and leftBalanced and rightBalanced
-            height = max(leftHeight, rightHeight) + 1
-            return balanced, height
-
-        balanced, _ = isBalancedHelper(root)
-        return balanced
-
-111. Minimum Depth of Binary Tree
-class Solution:
-    def minDepth(self, root: Optional[TreeNode]) -> int:
-        if not root:
-            return 0
-        if not root.left and not root.right:
-            return 1
-        if not root.left:
-            return self.minDepth(root.right) + 1
-        if not root.right:
-            return self.minDepth(root.left) + 1
-        return min(self.minDepth(root.left), self.minDepth(root.right)) + 1
-
-112. Path Sum
-if root is None:
-    return False
-if root.left is None and root.right is None:
-    return targetSum == root.val
-return self.hasPathSum(root.left, targetSum - root.val) or self.hasPathSum(root.right, targetSum - root.val)
-
-118. Pascal's Triangle
-class Solution:
-    def generate(self, numRows: int) -> List[List[int]]:
-        triangle = []
-        for i in range(numRows):
-            row = [1] * (i+1)
-            for j in range(1, i):
-                row[j] = triangle[i-1][j-1] + triangle[i-1][j]
-            triangle.append(row)
-        return triangle
-
-119. Pascal's Triangle II
-class Solution:
-    def getRow(self, rowIndex: int) -> List[int]:
-        row = [1] * (rowIndex+1)
-        for i in range(rowIndex):
-            for j in range(i, 0, -1):
-                row[j] += row[j-1]
-        return row
-
-121. Best Time to Buy and Sell Stock
-class Solution:
-    def maxProfit(self, prices: List[int]) -> int:
-        if len(prices) < 2:
-            return 0
-        min_price = prices[0]
-        max_profit = 0
-        for price in prices[1:]:
-            if price < min_price:
-                min_price = price
-            else:
-                max_profit = max(max_profit, price - min_price)
-        return max_profit
-
-125. Valid Palindrome
-class Solution:
-    def isPalindrome(self, s: str) -> bool:
-        s = s.lower()
-        s = ''.join(c for c in s if c.isalnum())
-        return s == s[::-1]
-
-961. N-Repeated Element in Size 2N Array
-class Solution:
-    def repeatedNTimes(self, nums: List[int]) -> int:
-        freq = {}
-        for num in nums:
-            freq[num] = freq.get(num, 0) + 1
-            if freq[num] == len(nums)/2:
-                return num
-
-965. Univalued Binary Tree
-def isUnivalTree(root):
-    if not root:
-        return True
-    if root.left and root.left.val != root.val:
-        return False
-    if root.right and root.right.val != root.val:
-        return False
-    return isUnivalTree(root.left) and isUnivalTree(root.right)
-
-509. Fibonacci Number
-class Solution:
-    def fib(self, n: int) -> int:
-        if n == 0:
-            return 0
-        if n == 1:
-            return 1
-        return self.fib(n-1) + self.fib(n-2)
-
-976. Largest Perimeter Triangle
-class Solution:
-    def largestPerimeter(self, nums: List[int]) -> int:
-        nums.sort(reverse=True)
-        for i in range(2, len(nums)):
-            if nums[i-2] < nums[i-1] + nums[i]:
-                return nums[i-2] + nums[i-1] + nums[i]
-        return 0
-
-977. Squares of a Sorted Array
-class Solution:
-    def sortedSquares(self, nums: List[int]) -> List[int]:
-        l = 0
-        r = len(nums) - 1
-        res = []
-        while l <= r:
-            if abs(nums[l]) > abs(nums[r]):
-                res.append(nums[l] ** 2)
-                l += 1
-            else:
-                res.append(nums[r] ** 2)
-                r -= 1
-        return res[::-1]
-
-989. Add to Array-Form of Integer
-class Solution:
-    def addToArrayForm(self, num: List[int], k: int) -> List[int]:
-        i = len(num) - 1
-        carry = 0
-        while k or carry:
-            if i >= 0:
-                carry += num[i]
-            carry += k % 10
-            num[i] = carry % 10
-            carry //= 10
-            k //= 10
-            i -= 1
-        return num if carry == 0 else [carry] + num[:i + 1]
-
-993. Cousins in Binary Tree
-queue = [root]
-found = 0
-while queue:
-    count = len(queue)
-    while count:
-        node = queue.pop(0)
-        if node.left and node.right:
-            if (node.left.val == x and node.right.val == y) or (node.left.val == y and node.right.val == x):
-                return False
-        if node.val == x or node.val == y:
-            found += 1
-        if node.left:
-            queue.append(node.left)
-        if node.right:
-            queue.append(node.right)
-        count -= 1
-    if found == 2:
-        return True
-    elif found == 1:
-        return False
-return False
-
-997. Find the Town Judge
-class Solution:
-    def findJudge(self, n: int, trust: List[List[int]]) -> int:
-        # create dictionaries to store who trusts and is trusted by each person
-        trusts = {}
-        trusted_by = {}
-        for i in range(1, n+1):
-            trusts[i] = []
-            trusted_by[i] = []
-        
-        # fill in the trust and trusted_by dictionaries based on input
-        for pair in trust:
-            trusts[pair[0]].append(pair[1])
-            trusted_by[pair[1]].append(pair[0])
-        
-        # find the person who is trusted by everyone else and trusts no one
-        judge = -1
-        for i in range(1, n+1):
-            if len(trusts[i]) == 0 and len(trusted_by[i]) == n-1:
-                judge = i
-                break
-        
-        return judge
-
-999. Available Captures for Rook
-class Solution:
-    def numRookCaptures(self, board: List[List[str]]) -> int:
-        # Initialize variables
-        captures = 0
-        rook_position = None
-
-        # Find the rook's position
-        for i in range(8):
-            for j in range(8):
-                if board[i][j] == "R":
-                    rook_position = (i,j)
-                    break
-
-        # Check available captures in each direction
-        directions = [(0,1),(0,-1),(1,0),(-1,0)]
-        for direction in directions:
-            x, y = rook_position[0]+direction[0], rook_position[1]+direction[1]
-            while 0 <= x < 8 and 0 <= y < 8:
-                if board[x][y] == "B":
-                    break
-                elif board[x][y] == "p":
-                    captures += 1
-                    break
-                x, y = x+direction[0], y+direction[1]
-
-        return captures
-
-1002. Find Common Characters
-from collections import Counter
-
-class Solution:
-    def commonChars(self, words: List[str]) -> List[str]:
-        count = Counter(words[0])
-        for word in words[1:]:
-            count &= Counter(word)
-        return list(count.elements())
-
-1005. Maximize Sum Of Array After K Negations
-class Solution:
-    def largestSumAfterKNegations(self, nums: List[int], k: int) -> int:
-        nums.sort() # sort array
+        # loop through the nums list
         for i in range(len(nums)):
-            if nums[i] < 0 and k > 0: # if negative number is found and still k actions are allowed
-                nums[i] *= -1 # negate the number and decrement k
-                k -= 1
-        if k % 2 == 1: # if k is still odd
-            nums[0] *= -1 # negate the smallest number
-        return sum(nums)
+            # calculate the difference between the target and current num
+            difference = target - nums[i]
+            # if the difference is in the dictionary, return the indices
+            if difference in num_dict:
+                return [num_dict[difference], i]
+            # add the current num to the dictionary with its index
+            num_dict[nums[i]] = i
 
-1009. Complement of Base 10 Integer
+15. 3Sum
 class Solution:
-    def bitwiseComplement(self, n: int) -> int:
-        binary = bin(n)[2:]
-        complement = ''
-        for i in binary:
-            if i == '0':
-                complement += '1'
-            else:
-                complement += '0'
-        return int(complement, 2)
-
-1013. Partition Array Into Three Parts With Equal Sum
-class Solution:
-    def canThreePartsEqualSum(self, arr: List[int]) -> bool:
-        total_sum = sum(arr)
-        if total_sum % 3 != 0:
-            return False
-        target = total_sum // 3
+    def threeSum(self, nums: List[int]) -> List[List[int]]:
         
-        curr_sum = 0
-        count = 0
-        for num in arr:
-            curr_sum += num
-            if curr_sum == target:
-                count += 1
-                curr_sum = 0
-        return count == 3
-
-1018. Binary Prefix Divisible By 5
-class Solution:
-    def prefixesDivBy5(self, nums: List[int]) -> List[bool]:
         res = []
-        num = 0
-        for i in nums:
-            num = (num * 2 + i) % 5
-            res.append(num == 0)
+        nums.sort()
+        
+        for i in range(len(nums)-2):
+            
+            if i > 0 and nums[i] == nums[i-1]:
+                continue
+                
+            j,k = i+1, len(nums)-1
+            
+            while j < k:
+                curSum = nums[i] + nums[j] + nums[k]
+                
+                if curSum == 0:
+                    res.append([nums[i], nums[j], nums[k]])
+                    while j < k and nums[j] == nums[j+1]:
+                        j+=1
+                    while j < k and nums[k] == nums[k-1]:
+                        k-=1
+                    j+=1
+                    k-=1
+                
+                elif curSum < 0:
+                    j+=1
+                else:
+                    k-=1
+                    
         return res
 
-1021. Remove Outermost Parentheses
+18. 4Sum
 class Solution:
-    def removeOuterParentheses(self, s: str) -> str:
-        result = ""
-        count = 0
-        for c in s:
-            if c == "(":
-                if count > 0:
-                    result += c
-                count += 1
+    def fourSum(self, nums: List[int], target: int) -> List[List[int]]:
+        nums.sort()
+        n = len(nums)
+        res = []
+        for a in range(n - 3):
+            if a > 0 and nums[a] == nums[a - 1]:
+                continue
+            for b in range(a + 1, n - 2):
+                if b > a + 1 and nums[b] == nums[b - 1]:
+                    continue
+                c, d = b + 1, n - 1
+                while c < d:
+                    s = nums[a] + nums[b] + nums[c] + nums[d]
+                    if s == target:
+                        res.append([nums[a], nums[b], nums[c], nums[d]])
+                        while c < d and nums[c] == nums[c + 1]:
+                            c += 1
+                        while c < d and nums[d] == nums[d - 1]:
+                            d -= 1
+                        c += 1
+                        d -= 1
+                    elif s < target:
+                        c += 1
+                    else:
+                        d -= 1
+        return res
+
+167. Two Sum II - Input Array Is Sorted
+class Solution:
+    def twoSum(self, numbers: List[int], target: int) -> List[int]:
+        left = 0
+        right = len(numbers) - 1
+        while left < right:
+            current_sum = numbers[left] + numbers[right]
+            if current_sum == target:
+                return [left+1, right+1]
+            elif current_sum < target:
+                left += 1
             else:
-                count -= 1
-                if count > 0:
-                    result += c
-        return result
+                right -= 1
+        return [-1,-1]
 
-1022. Sum of Root To Leaf Binary Numbers
-# Definition for a binary tree node.
-# class TreeNode:
-#     def __init__(self, val=0, left=None, right=None):
-#         self.val = val
-#         self.left = left
-#         self.right = right
-
+560. Subarray Sum Equals K
 class Solution:
-    def sumRootToLeaf(self, root: Optional[TreeNode]) -> int:
-        def dfs(node, curr_val):
-            if not node:
-                return 0
+    def subarraySum(self, nums: List[int], k: int) -> int:
+        count = 0
+        sum_map = {0: 1}
+        sum_so_far = 0
+        
+        for num in nums:
+            sum_so_far += num
+            count += sum_map.get(sum_so_far - k, 0)
+            sum_map[sum_so_far] = sum_map.get(sum_so_far, 0) + 1
+        
+        return count
 
-            curr_val = curr_val * 2 + node.val
-
-            if not node.left and not node.right:
-                return curr_val
-
-            return dfs(node.left, curr_val) + dfs(node.right, curr_val)
-
-        return dfs(root, 0)
-
-1025. Divisor Game
+653. Two Sum IV - Input is a BST
 class Solution:
-    def divisorGame(self, n: int) -> bool:
-        return n % 2 == 0
-
-1030. Matrix Cells in Distance Order
-class Solution:
-    def allCellsDistOrder(self, rows: int, cols: int, rCenter: int, cCenter: int) -> List[List[int]]:
-        distances = []
-        for r in range(rows):
-            for c in range(cols):
-                dist = abs(r-rCenter) + abs(c-cCenter)
-                distances.append([dist, [r,c]])
-        distances.sort(key=lambda x: x[0])
-        return [d[1] for d in distances]
-
-1160. Find Words That Can Be Formed by Characters
-class Solution:
-    def countCharacters(self, words: List[str], chars: str) -> int:
-        total_length = 0
-        for word in words:
-            temp_chars = chars
-            good_word = True
-            for char in word:
-                if char not in temp_chars:
-                    good_word = False
-                    break
-                temp_chars = temp_chars.replace(char, '', 1)
-            if good_word:
-                total_length += len(word)
-        return total_length
-
-1037. Valid Boomerang
-class Solution:
-    def isBoomerang(self, points: List[List[int]]) -> bool:
-        if points[0] == points[1] or points[1] == points[2] or points[0] == points[2]:
+    def findTarget(self, root: Optional[TreeNode], k: int) -> bool:
+        if not root:
             return False
-        slope1 = (points[0][1] - points[1][1]) * (points[0][0] - points[2][0])
-        slope2 = (points[0][1] - points[2][1]) * (points[0][0] - points[1][0])
-        return slope1 != slope2
+        stack, seen = [], set()
+        stack.append(root)
+        while stack:
+            node = stack.pop()
+            if k - node.val in seen:
+                return True
+            seen.add(node.val)
+            if node.left:
+                stack.append(node.left)
+            if node.right:
+                stack.append(node.right)
+        return False
 
-1046. Last Stone Weight
+1679. Max Number of K-Sum Pairs
 class Solution:
-    def lastStoneWeight(self, stones: List[int]) -> int:
-        while len(stones) > 1:
-            stones.sort()
-            x = stones.pop()
-            y = stones.pop()
-            if x != y:
-                stones.append(y - x)
-        return stones[0] if stones else 0
-
-1047. Remove All Adjacent Duplicates In String
-class Solution:
-    def removeDuplicates(self, s: str) -> str:
-        stack = []
-        for char in s:
-            if stack and char == stack[-1]:
-                stack.pop()
-            else:
-                stack.append(char)
-        return ''.join(stack)
-
-1051. Height Checker
-class Solution:
-    def heightChecker(self, heights: List[int]) -> int:
-        expected = sorted(heights)
-        return sum(x != y for x,y in zip(heights, expected))
-
-1071. Greatest Common Divisor of Strings
-class Solution:
-    def gcdOfStrings(self, str1: str, str2: str) -> str:
-        if len(str1) < len(str2):
-            str1, str2 = str2, str1
-        if str1 == str2:
-            return str1
-        if str1[:len(str2)] != str2:
-            return ""
-        return self.gcdOfStrings(str1[len(str2):], str2)
-
-1078. Occurrences After Bigram
-class Solution:
-    def findOcurrences(self, text: str, first: str, second: str) -> List[str]:
-        words = text.split()
-        result = []
-        for i in range(len(words) - 2):
-            if words[i] == first and words[i+1] == second:
-                result.append(words[i+2])
-        return result
-
-1089. Duplicate Zeros
-class Solution:
-    def duplicateZeros(self, arr: List[int]) -> None:
-        i = 0
-        while i < len(arr):
-            if arr[i] == 0:
-                arr.insert(i+1, 0)
-                arr.pop()
-                i += 1
-            i += 1
-
-1103. Distribute Candies to People
-class Solution:
-    def distributeCandies(self, candies: int, num_people: int) -> List[int]:
-        distribution = [0] * num_people
-        candies_given = 1
-        index = 0
-        while candies > 0:
-            distribution[index % num_people] += min(candies_given, candies)
-            candies -= candies_given
-            candies_given += 1
-            index += 1
-        return distribution
-
-1108. Defanging an IP Address
-class Solution:
-    def defangIPaddr(self, address: str) -> str:
-        return address.replace('.', '[.]')
-
-1619. Mean of Array After Removing Some Elements
-class Solution:
-    def trimMean(self, arr: List[int]) -> float:
-        arr.sort()
-        trim_idx = len(arr) // 20
-        trim_arr = arr[trim_idx:-trim_idx]
-        return sum(trim_arr) / len(trim_arr)
-
-1122. Relative Sort Array
-class Solution:
-    def relativeSortArray(self, arr1: List[int], arr2: List[int]) -> List[int]:
-        order = {num:i for i, num in enumerate(arr2)}
-        return sorted(arr1, key=lambda x: order.get(x, 1000+x))
-
-1287. Element Appearing More Than 25% In Sorted Array
-class Solution:
-    def findSpecialInteger(self, arr: List[int]) -> int:
-        n = len(arr)
-        threshold = n // 4
-        for i in range(n):
-            if arr[i] == arr[i+threshold]:
-                return arr[i]
-
-1128. Number of Equivalent Domino Pairs
-class Solution:
-    def numEquivDominoPairs(self, dominoes: List[List[int]]) -> int:
+    def maxOperations(self, nums: List[int], k: int) -> int:
         count = 0
-        dict = {}
-        for domino in dominoes:
-            pair1 = tuple(domino)
-            pair2 = tuple(reversed(domino))
-            if pair1 in dict:
-                count += dict[pair1]
-                dict[pair1] += 1
-            elif pair2 in dict:
-                count += dict[pair2]
-                dict[pair2] += 1
-            else:
-                dict[pair1] = 1
-        return count
-
-1299. Replace Elements with Greatest Element on Right Side
-class Solution:
-    def replaceElements(self, arr: List[int]) -> List[int]:
-        max_right = -1
-        for i in range(len(arr) - 1, -1, -1):
-            temp = arr[i]
-            arr[i] = max_right
-            max_right = max(max_right, temp)
-        return arr
-
-1137. N-th Tribonacci Number
-class Solution:
-    def tribonacci(self, n: int) -> int:
-        if n < 3:
-            return [0, 1, 1][n]
-        t0, t1, t2 = 0, 1, 1
-        for i in range(3, n+1):
-            ti = t0 + t1 + t2
-            t0, t1, t2 = t1, t2, ti
-        return t2
-
-1313. Decompress Run-Length Encoded List
-class Solution:
-    def decompressRLElist(self, nums: List[int]) -> List[int]:
-        res = []
-        for i in range(len(nums)//2):
-            freq = nums[2*i]
-            val = nums[2*i+1]
-            res += [val] * freq
-        return res
-
-1331. Rank Transform of an Array
-class Solution:
-    def arrayRankTransform(self, arr: List[int]) -> List[int]:
-        rank = {}
-        sorted_arr = sorted(set(arr))
-        for i in range(len(sorted_arr)):
-            rank[sorted_arr[i]] = i+1
-        return [rank[num] for num in arr]
-
-1154. Day of the Year
-class Solution:
-    def dayOfYear(self, date: str) -> int:
-        year, month, day = map(int, date.split('-'))
-        days_in_month = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
-        if year % 4 == 0 and (year % 100 != 0 or year % 400 == 0):
-            days_in_month[1] = 29
-        return sum(days_in_month[:month-1]) + day
-
-1935. Maximum Number of Words You Can Type
-class Solution:
-    def canBeTypedWords(self, text: str, brokenLetters: str) -> int:
-        brokenLetters_set = set(brokenLetters)
-        count = 0
-        for word in text.split():
-            if not set(word).intersection(brokenLetters_set):
+        num_dict = {}
+        for num in nums:
+            if k - num in num_dict and num_dict[k - num] > 0:
                 count += 1
+                num_dict[k - num] -= 1
+            else:
+                num_dict[num] = num_dict.get(num, 0) + 1
         return count
+
+1711. Count Good Meals
+class Solution:
+    def countPairs(self, deliciousness: List[int]) -> int:
+        MOD = 10**9 + 7
+        freq = {}
+        for d in deliciousness:
+            if d not in freq:
+                freq[d] = 0
+            freq[d] += 1
+        ans = 0
+        for d in freq:
+            for k in range(22):
+                target = 2**k - d
+                if target in freq and (d != target or freq[d] > 1):
+                    ans += freq[d] * freq[target]
+        return ans // 2 % MOD
+
+2006. Count Number of Pairs With Absolute Difference K
+class Solution:
+    def countKDifference(self, nums: List[int], k: int) -> int:
+        count = 0
+        for i in range(len(nums)):
+            for j in range(i+1, len(nums)):
+                if abs(nums[i] - nums[j]) == k:
+                    count += 1
+        return count
+
+2023. Number of Pairs of Strings With Concatenation Equal to Target
+class Solution:
+    def numOfPairs(self, nums: List[str], target: str) -> int:
+        count = 0
+        for i in range(len(nums)):
+            for j in range(len(nums)):
+                if i != j:
+                    if nums[i]+nums[j] == target:
+                        count += 1
+        return count
+
+2200. Find All K-Distant Indices in an Array
+class Solution:
+    def findKDistantIndices(self, nums: List[int], key: int, k: int) -> List[int]:
+        kDistant_indices = []
+        for i in range(len(nums)):
+            if nums[i] == key:
+                for j in range(max(0, i-k), i+k+1):
+                    if nums[j] == key and abs(i-j) <= k:
+                        kDistant_indices.append(j)
+        return sorted(kDistant_indices)
+
+2351. First Letter to Appear Twice
+class Solution:
+    def repeatedCharacter(self, s: str) -> str:
+        freq = {}
+        for i in range(len(s)):
+            if s[i] in freq:
+                return s[i]
+            else:
+                freq[s[i]] = 1
+
+2354. Number of Excellent Pairs
+class Solution:
+    def countExcellentPairs(self, nums: List[int], k: int) -> int:
+        pairs = set()
+        for i in range(len(nums)):
+            for j in range(i+1, len(nums)):
+                num1, num2 = nums[i], nums[j]
+                bitwise_or = num1 | num2
+                bitwise_and = num1 & num2
+                set_bit_count = bin(bitwise_or | bitwise_and).count('1')
+                if set_bit_count >= k:
+                    pairs.add((min(num1, num2), max(num1, num2)))
+        return len(pairs)
+
+2367. Number of Arithmetic Triplets
+class Solution:
+    def arithmeticTriplets(self, nums: List[int], diff: int) -> int:
+        ans = 0
+        dp = {}
+        for num in nums:
+            ans += dp.get(num - diff, 0) + dp.get(num + diff, 0)
+            dp[num] = dp.get(num, 0) + 1
+        return ans
+
+2374. Node With Highest Edge Score
+class Solution:
+    def edgeScore(self, edges: List[int]) -> int:
+        n = len(edges)
+        in_degrees = [0] * n
+        score = [0] * n
+        
+        for i in range(n):
+            if edges[i] != -1:
+                in_degrees[edges[i]] += 1
+        
+        for i in range(n):
+            if in_degrees[i] == 0:
+                continue
+            j = i
+            while in_degrees[j] == 1:
+                in_degrees[j] = 0
+                score[edges[j]] += i
+                j = edges[j]
+        
+        max_score = float('-inf')
+        ans = 0
+        for i in range(n):
+            if score[i] > max_score:
+                max_score = score[i]
+                ans = i
+        
+        return ans
+
+2399. Check Distances Between Same Letters
+class Solution:
+    def checkDistances(self, s: str, distance: List[int]) -> bool:
+        letters = set(s)
+        for letter in letters:
+            indices = [i for i in range(len(s)) if s[i] == letter]
+            if len(indices) > 1:
+                for i in range(len(indices) - 1):
+                    if indices[i+1] - indices[i] - 1 != distance[ord(letter) - ord('a')]:
+                        return False
+        return True
+
+2395. Find Subarrays With Equal Sum
+class Solution:
+    def findSubarrays(self, nums: List[int]) -> bool:
+        subarrays = {}
+        for i in range(len(nums)-1):
+            for j in range(i+1,len(nums)):
+                if(sum(nums[i:i+2]) == sum(nums[j:j+2])):
+                    if(i not in subarrays):
+                        subarrays[i] = set()
+                    subarrays[i].add(j)
+                    if(j not in subarrays):
+                        subarrays[j] = set()
+                    subarrays[j].add(i)
+        for k in subarrays:
+            if len(subarrays[k]) > 1:
+                return True
+        return False
+
+2441. Largest Positive Integer That Exists With Its Negative
+class Solution:
+    def findMaxK(self, nums: List[int]) -> int:
+        max_k = -1
+        for num in nums:
+            if -num in nums and num > max_k:
+                max_k = num
+        return max_k
+
+2465. Number of Distinct Averages
+class Solution:
+    def distinctAverages(self, nums: List[int]) -> int:
+        averages = set()
+        n = len(nums)
+        for i in range(n//2):
+            min_num = min(nums)
+            nums.remove(min_num)
+            max_num = max(nums)
+            nums.remove(max_num)
+            avg = (min_num + max_num) / 2
+            averages.add(avg)
+        return len(averages)
 
