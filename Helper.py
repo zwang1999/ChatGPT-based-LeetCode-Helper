@@ -217,7 +217,7 @@ def main(args):
     
     q = Queue()
 
-    num_threads = round(max(0.1, thread_to_question(len(question_slugs))) * len(question_slugs))
+    num_threads = round(max(0.05, thread_to_question(len(question_slugs))) * len(question_slugs))
     
     for i in range(num_threads):
         worker = Thread(target = get_question_by_slug_threading, args = (q, ))
