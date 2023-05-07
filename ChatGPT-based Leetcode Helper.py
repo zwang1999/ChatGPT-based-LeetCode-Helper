@@ -6,7 +6,9 @@ from scipy import stats
 from queue import Queue
 from threading import Thread
 from threading import Lock
-import openai
+from multiprocessing import cpu_count
+from multiprocessing.pool import Pool
+from code_generation import get_chatGPT_reply_multiprocessing
 import argparse
 
 session = requests.Session()
@@ -242,40 +244,20 @@ def main(args):
     
     # Optimized point 2: Multi-threaded ChatGPT requests
     
-    openai.api_key = args.api_key
-    
-    replies = []
-    lock = Lock()
-    def get_chatGPT_reply_threading(q):
-        while True:
-            questionId, content, code, feedback = q.get()
-            message = content_to_prompt(content, code, feedback)
-            messages = [{'role': 'user', 'content': message}]
-            chat_completion = openai.ChatCompletion.create(model = 'gpt-3.5-turbo', messages = messages)
-            reply = chat_completion.choices[0].message.content
-            with lock:
-                replies.append((int(questionId), reply))
-            q.task_done()
+    info = [(question['questionId'], question['content'], question['code'], args.api_key, args.feedback) for question in questions]
 
     start_time = time.time()
+
+    num_processes = cpu_count()
+
+    with Pool(num_processes) as p:
+        replies = p.starmap(get_chatGPT_reply_multiprocessing, info)
     
-    q = Queue()
-
-    num_threads = round(max(0.1, thread_to_question(len(questions))) * len(questions))
-    
-    for i in range(num_threads):
-        worker = Thread(target = get_chatGPT_reply_threading, args = (q, ))
-        worker.setDaemon(True) 
-        worker.start()
-
-    for question in questions:
-        q.put((question['questionId'], question['content'], question['code'], args.feedback))
-
-    q.join()
-
     replies.sort(key = lambda x : x[0])
          
     end_time = time.time()
+ 
+    print(f'Time for {num_processes} Processes: {end_time - start_time} seconds')
  
     print(f'Time for {num_threads} Threads: {end_time - start_time} seconds')
     

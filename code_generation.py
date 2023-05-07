@@ -1,10 +1,6 @@
 
 import openai
 
-# Please enter your own OpenAI API key
-openai.api_key = ''
-feedback = False
-
 def content_to_prompt(content, code, feedback):
     description = 'Here is the question prompt:\n'
     description += content[0] + '\n'
@@ -27,7 +23,8 @@ def content_to_prompt(content, code, feedback):
     
     return message
 
-def get_chatGPT_reply_multiprocessing(questionId, content, code, feedback):
+def get_chatGPT_reply_multiprocessing(questionId, content, code, api_key, feedback):
+    openai.api_key = api_key
     message = content_to_prompt(content, code, feedback)
     messages = [{'role': 'user', 'content': message}]
     chat_completion = openai.ChatCompletion.create(model = 'gpt-3.5-turbo', messages = messages)
